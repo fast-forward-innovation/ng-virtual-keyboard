@@ -50,8 +50,16 @@ export declare class VirtualKeyboardComponent implements OnInit, OnDestroy {
      */
     close(): void;
     /**
-     * Method to update caret position. This is called on click event in virtual keyboard input element.
+     * Method to blur all input fields
      */
+    blurAllInputs(): void;
+    /**
+     * Method to iterate over query selectors
+     */
+    iterateSelectors(array: any, callback: any, scope: any): void;
+    /**
+   * Method to update caret position. This is called on click event in virtual keyboard input element.
+   */
     updateCaretPosition(): void;
     /**
      * Method to handle actual "key" press from virtual keyboard.

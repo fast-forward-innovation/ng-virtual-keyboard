@@ -76,6 +76,7 @@ var VirtualKeyboardComponent = /** @class */ (function () {
     VirtualKeyboardComponent.prototype.ngOnDestroy = function () {
         this.virtualKeyboardService.reset();
         console.log('onDestroy Keyboard');
+        this.blurAllInputs();
     };
     /**
      * Method to close virtual keyboard dialog
@@ -83,10 +84,29 @@ var VirtualKeyboardComponent = /** @class */ (function () {
     VirtualKeyboardComponent.prototype.close = function () {
         this.dialogRef.close();
         console.log('onClose Keyboard');
+        this.blurAllInputs();
     };
     /**
-     * Method to update caret position. This is called on click event in virtual keyboard input element.
+     * Method to blur all input fields
      */
+    VirtualKeyboardComponent.prototype.blurAllInputs = function () {
+        var inputs = document.querySelectorAll('input');
+        this.iterateSelectors(inputs, function (index, value) {
+            console.log(index, value); // passes index + value back!
+        }, this);
+    };
+    /**
+     * Method to iterate over query selectors
+     */
+    VirtualKeyboardComponent.prototype.iterateSelectors = function (array, callback, scope) {
+        for (var i = 0; i < array.length; i++) {
+            callback.call(scope, i, array[i]); // passes back stuff we need
+        }
+    };
+    ;
+    /**
+   * Method to update caret position. This is called on click event in virtual keyboard input element.
+   */
     VirtualKeyboardComponent.prototype.updateCaretPosition = function () {
         this.virtualKeyboardService.setCaretPosition(this.keyboardInput.nativeElement.selectionStart);
     };
