@@ -75,7 +75,6 @@ var VirtualKeyboardComponent = /** @class */ (function () {
      */
     VirtualKeyboardComponent.prototype.ngOnDestroy = function () {
         this.virtualKeyboardService.reset();
-        console.log('onDestroy Keyboard');
         this.blurAllInputs();
     };
     /**
@@ -83,7 +82,6 @@ var VirtualKeyboardComponent = /** @class */ (function () {
      */
     VirtualKeyboardComponent.prototype.close = function () {
         this.dialogRef.close();
-        console.log('onClose Keyboard');
         this.blurAllInputs();
     };
     /**
@@ -92,7 +90,6 @@ var VirtualKeyboardComponent = /** @class */ (function () {
     VirtualKeyboardComponent.prototype.blurAllInputs = function () {
         var inputs = document.querySelectorAll('input');
         this.iterateSelectors(inputs, function (index, value) {
-            console.log(index, value); // passes index + value back!
             value.blur();
         }, this);
     };

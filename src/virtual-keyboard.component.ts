@@ -161,9 +161,6 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
    */
   public ngOnDestroy(): void {
     this.virtualKeyboardService.reset();
-
-    console.log('onDestroy Keyboard');
-
     this.blurAllInputs();
   }
 
@@ -172,8 +169,6 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
    */
   public close(): void {
     this.dialogRef.close();
-
-    console.log('onClose Keyboard');
     this.blurAllInputs();
   }
 
@@ -183,7 +178,6 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
     public blurAllInputs(): void {
         var inputs = document.querySelectorAll('input');
         this.iterateSelectors(inputs, function (index, value) {
-            console.log(index, value); // passes index + value back!
             value.blur();
         }, this);
     }
