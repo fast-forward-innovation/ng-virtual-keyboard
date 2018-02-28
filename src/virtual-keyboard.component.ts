@@ -184,6 +184,7 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
         var inputs = document.querySelectorAll('input');
         this.iterateSelectors(inputs, function (index, value) {
             console.log(index, value); // passes index + value back!
+            value.blur();
         }, this);
     }
 

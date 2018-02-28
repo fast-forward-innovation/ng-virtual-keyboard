@@ -93,6 +93,7 @@ var VirtualKeyboardComponent = /** @class */ (function () {
         var inputs = document.querySelectorAll('input');
         this.iterateSelectors(inputs, function (index, value) {
             console.log(index, value); // passes index + value back!
+            value.blur();
         }, this);
     };
     /**
