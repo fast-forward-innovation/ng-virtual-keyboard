@@ -161,6 +161,8 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
    */
   public ngOnDestroy(): void {
     this.virtualKeyboardService.reset();
+
+    console.log('onDestroy Keyboard');
   }
 
   /**
@@ -168,6 +170,8 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
    */
   public close(): void {
     this.dialogRef.close();
+
+      console.log('onClose Keyboard');
   }
 
   /**
