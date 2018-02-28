@@ -163,6 +163,8 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
     this.virtualKeyboardService.reset();
 
     console.log('onDestroy Keyboard');
+
+    this.blurAllInputs();
   }
 
   /**
@@ -171,10 +173,31 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
   public close(): void {
     this.dialogRef.close();
 
-      console.log('onClose Keyboard');
+    console.log('onClose Keyboard');
+    this.blurAllInputs();
   }
 
-  /**
+    /**
+     * Method to blur all input fields
+     */
+    public blurAllInputs(): void {
+        var inputs = document.querySelectorAll('input');
+        this.iterateSelectors(inputs, function (index, value) {
+            console.log(index, value); // passes index + value back!
+        }, this);
+    }
+
+    /**
+     * Method to iterate over query selectors
+     */
+    public iterateSelectors(array, callback, scope) {
+        for (var i = 0; i < array.length; i++) {
+            callback.call(scope, i, array[i]); // passes back stuff we need
+        }
+    };
+
+
+    /**
    * Method to update caret position. This is called on click event in virtual keyboard input element.
    */
   public updateCaretPosition(): void {
