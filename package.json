@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/protacon/ng-virtual-keyboard.git"
+    "url": "git+https://github.com/fast-forward-innovation/ng-virtual-keyboard.git"
   },
   "keywords": [
     "Angular"
