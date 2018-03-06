@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
-import { keyboardCapsLockLayout, KeyboardLayout } from './layouts';
+import {isSpecial, keyboardCapsLockLayout, KeyboardLayout} from './layouts';
 import { VirtualKeyboardService } from './virtual-keyboard.service';
 import { KeyPressInterface } from './key-press.interface';
 
@@ -23,6 +23,7 @@ import { KeyPressInterface } from './key-press.interface';
             (click)="updateCaretPosition()"
             [(ngModel)]="inputElement.nativeElement.value" placeholder="{{ placeholder }}"
             [maxLength]="maxLength"
+                 (keyup)="onKey($event)"
           />
         </mat-input-container>
     
@@ -127,7 +128,7 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     setTimeout(() => {
       this.keyboardInput.nativeElement.focus();
-    }, 0);
+    }, 800);
 
     this.virtualKeyboardService.shift$.subscribe((shift: boolean) => {
       this.shift = shift;
@@ -190,6 +191,38 @@ export class VirtualKeyboardComponent implements OnInit, OnDestroy {
             callback.call(scope, i, array[i]); // passes back stuff we need
         }
     };
+
+    /**
+     * Hackery to allow physical keyboard input
+     */
+    public onKey(event) {
+        console.log(event.key);
+
+        if(isSpecial(event.key)) {
+            console.log('special');
+            return;
+        }
+
+        let value = '';
+
+        // We have caret position, so attach character to specified position
+        if (!isNaN(this.caretPosition)) {
+            value = [
+                this.inputElement.nativeElement.value.slice(0, this.caretPosition),
+                event.key,
+                this.inputElement.nativeElement.value.slice(this.caretPosition)
+            ].join('');
+
+            // Update caret position
+            this.virtualKeyboardService.setCaretPosition(this.caretPosition + 1);
+        } else {
+            value = `${this.inputElement.nativeElement.value}${event.key}`;
+        }
+
+        // And finally set new value to input
+        this.inputElement.nativeElement.value = value;
+
+    }
 
 
     /**
