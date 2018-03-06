@@ -58,6 +58,10 @@ export declare class VirtualKeyboardComponent implements OnInit, OnDestroy {
      */
     iterateSelectors(array: any, callback: any, scope: any): void;
     /**
+     * Hackery to allow physical keyboard input
+     */
+    onKey(event: any): void;
+    /**
    * Method to update caret position. This is called on click event in virtual keyboard input element.
    */
     updateCaretPosition(): void;

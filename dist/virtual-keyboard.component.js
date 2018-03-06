@@ -49,7 +49,7 @@ var VirtualKeyboardComponent = /** @class */ (function () {
         var _this = this;
         setTimeout(function () {
             _this.keyboardInput.nativeElement.focus();
-        }, 0);
+        }, 800);
         this.virtualKeyboardService.shift$.subscribe(function (shift) {
             _this.shift = shift;
         });
@@ -102,6 +102,32 @@ var VirtualKeyboardComponent = /** @class */ (function () {
         }
     };
     ;
+    /**
+     * Hackery to allow physical keyboard input
+     */
+    VirtualKeyboardComponent.prototype.onKey = function (event) {
+        console.log(event.key);
+        if (layouts_1.isSpecial(event.key)) {
+            console.log('special');
+            return;
+        }
+        var value = '';
+        // We have caret position, so attach character to specified position
+        if (!isNaN(this.caretPosition)) {
+            value = [
+                this.inputElement.nativeElement.value.slice(0, this.caretPosition),
+                event.key,
+                this.inputElement.nativeElement.value.slice(this.caretPosition)
+            ].join('');
+            // Update caret position
+            this.virtualKeyboardService.setCaretPosition(this.caretPosition + 1);
+        }
+        else {
+            value = "" + this.inputElement.nativeElement.value + event.key;
+        }
+        // And finally set new value to input
+        this.inputElement.nativeElement.value = value;
+    };
     /**
    * Method to update caret position. This is called on click event in virtual keyboard input element.
    */
@@ -237,7 +263,7 @@ var VirtualKeyboardComponent = /** @class */ (function () {
     VirtualKeyboardComponent.decorators = [
         { type: core_1.Component, args: [{
                     selector: 'virtual-keyboard',
-                    template: "\n    <div class=\"container\">\n      <div fxLayout=\"column\">\n        <mat-input-container>\n          <button class=\"close\" color=\"primary\" mat-mini-fab\n            (click)=\"close()\"\n          >\n            <mat-icon>check</mat-icon>\n          </button>\n    \n          <input type=\"text\"\n            matInput\n            #keyboardInput\n            (click)=\"updateCaretPosition()\"\n            [(ngModel)]=\"inputElement.nativeElement.value\" placeholder=\"{{ placeholder }}\"\n            [maxLength]=\"maxLength\"\n          />\n        </mat-input-container>\n    \n        <div fxLayout=\"row\" fxLayoutAlign=\"center center\"\n          *ngFor=\"let row of layout; let rowIndex = index\"\n          [attr.data-index]=\"rowIndex\"\n        >\n          <virtual-keyboard-key\n            *ngFor=\"let key of row; let keyIndex = index\"\n            [key]=\"key\"\n            [disabled]=\"disabled\"\n            [attr.data-index]=\"keyIndex\"\n            (keyPress)=\"keyPress($event)\"\n          ></virtual-keyboard-key>\n        </div>\n      </div>\n    </div>\n  ",
+                    template: "\n    <div class=\"container\">\n      <div fxLayout=\"column\">\n        <mat-input-container>\n          <button class=\"close\" color=\"primary\" mat-mini-fab\n            (click)=\"close()\"\n          >\n            <mat-icon>check</mat-icon>\n          </button>\n    \n          <input type=\"text\"\n            matInput\n            #keyboardInput\n            (click)=\"updateCaretPosition()\"\n            [(ngModel)]=\"inputElement.nativeElement.value\" placeholder=\"{{ placeholder }}\"\n            [maxLength]=\"maxLength\"\n                 (keyup)=\"onKey($event)\"\n          />\n        </mat-input-container>\n    \n        <div fxLayout=\"row\" fxLayoutAlign=\"center center\"\n          *ngFor=\"let row of layout; let rowIndex = index\"\n          [attr.data-index]=\"rowIndex\"\n        >\n          <virtual-keyboard-key\n            *ngFor=\"let key of row; let keyIndex = index\"\n            [key]=\"key\"\n            [disabled]=\"disabled\"\n            [attr.data-index]=\"keyIndex\"\n            (keyPress)=\"keyPress($event)\"\n          ></virtual-keyboard-key>\n        </div>\n      </div>\n    </div>\n  ",
                     styles: ["\n    .close {\n      position: relative;\n      float: right;\n      top: -16px;\n      right: 0;\n      margin-bottom: -40px;\n    }\n  \n    .mat-input-container {\n      margin: -16px 0;\n      font-size: 32px;\n    }\n  \n    .mat-input-element:disabled {\n      color: currentColor;\n    }\n\n    :host /deep/ .mat-input-placeholder {\n      top: 10px !important;\n      font-size: 24px !important;\n    }\n  "]
                 },] },
     ];
